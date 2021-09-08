@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+
+	<groupId>com.mujiang</groupId>
+	<artifactId>akka-typed-example</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<name>akka-typed-example</name>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<akka.version>2.6.14</akka.version>
+		<scala.binary.version>2.13</scala.binary.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.typesafe.akka</groupId>
+				<artifactId>akka-bom_${scala.binary.version}</artifactId>
+				<version>2.6.14</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+
+		<!-- apache-->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.16.20</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+
+<!--		<dependency>-->
+<!--			<groupId>com.alibaba</groupId>-->
+<!--			<artifactId>fastjson</artifactId>-->
+<!--			<version>1.2.67</version>-->
+<!--		</dependency>-->
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.11.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.11.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-actor-typed_${scala.binary.version}</artifactId>
+<!--			<version>${akka.version}</version>-->
+		</dependency>
+
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-cluster-typed_${scala.binary.version}</artifactId>
+<!--			<version>${akka.version}</version>-->
+		</dependency>
+
+<!--		<dependency>-->
+<!--			<groupId>com.typesafe.akka</groupId>-->
+<!--			<artifactId>akka-cluster-tools_${scala.binary.version}</artifactId>-->
+<!--		</dependency>-->
+
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-serialization-jackson_${scala.binary.version}</artifactId>
+<!--			<version>${akka.version}</version>-->
+		</dependency>
+
+<!--		<dependency>-->
+<!--			<groupId>com.typesafe.akka</groupId>-->
+<!--			<artifactId>akka-discovery_${scala.binary.version}</artifactId>-->
+<!--		</dependency>-->
+
+	</dependencies>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+			</plugin>
+
+		</plugins>
+		<defaultGoal>compile</defaultGoal>
+	</build>
+
+<!--	<repositories>-->
+<!--		<repository>-->
+<!--			<id>central</id>-->
+<!--			<name>citic center</name>-->
+<!--			<url>http://10.242.3.242:8081/repository/maven-public/</url>-->
+<!--		</repository>-->
+<!--		<repository>-->
+<!--			<id>user-releases</id>-->
+<!--			<url>http://10.242.3.242:8081/repository/maven-releases/</url>-->
+<!--		</repository>-->
+<!--		<repository>-->
+<!--			<id>user-snapshots</id>-->
+<!--			<url>http://10.242.3.242:8081/repository/maven-snapshots/</url>-->
+<!--		</repository>-->
+<!--	</repositories>-->
+
+</project>
