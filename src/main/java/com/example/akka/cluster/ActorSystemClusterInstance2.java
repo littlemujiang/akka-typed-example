@@ -31,6 +31,7 @@ import java.util.Map;
 @Slf4j
 public class ActorSystemClusterInstance2 {
 
+    //注册FilterActor到group router，并给group router发消息
     public static class RootBehaviorFilterGroupRouter {
         static Behavior create() {
             return Behaviors.setup(context -> {
@@ -68,7 +69,8 @@ public class ActorSystemClusterInstance2 {
         }
     }
 
-    public static class RootBehaviorWithGroupRouter {
+    // 单例actor，并发消息
+    public static class RootBehaviorSingletonActor {
         static Behavior create() {
             return Behaviors.setup(context -> {
 
@@ -89,46 +91,9 @@ public class ActorSystemClusterInstance2 {
 
                 Thread.sleep(10 * 1000);
 
-                log.info("=== ********** ===");
                 globalFilter.tell(message);
 
                 System.out.println(context.getSystem().printTree());
-
-//                SingletonActor<IDeviceMessage> filterActor = SingletonActor.apply(FilterActor.create(filterConfig, null), "GlobalFilter").withStopMessage(StopMessage.INSTANCE);
-
-//                ActorRef globalFilter = singleton.init(filterActor);
-
-//                ActorRef globalFilter2 =   singleton.init(
-//                        SingletonActor.of(
-//                                Behaviors.supervise(FilterActor.create(filterConfig, null))
-//                                        .onFailure(
-//                                                SupervisorStrategy.restartWithBackoff(
-//                                                        Duration.ofSeconds(1), Duration.ofSeconds(10), 0.2)),
-//                                "GlobalFilter"));
-
-//                Thread.sleep(10 * 1000);
-//
-//                BehaviorConfig processConfig = new BehaviorConfig("power = current * voltage");
-//                // 创建process的behavior(下一个节点指向 pool router 而不是 普通actor)
-//                Behavior<IDeviceMessage> processBehavior = ProcessActor.create(processConfig, null);
-//                // 实例化actor
-//                ActorRef<IDeviceMessage> processActorRef = context.spawn(processBehavior, "Process");
-//
-//                DevicePropertyMessage message = DevicePropertyMessage.builder()
-//                        .thingId("D007")
-//                        .current(3.58)
-//                        .voltage(380.00)
-//                        .build();
-//
-//                Thread.sleep(2 * 1000);
-//
-//                for(int i=0; i < 10; i++){
-//                    message.setMsgId(i);
-//                    processActorRef.tell(message);
-//                    Thread.sleep(3 * 1000);
-//                }
-//
-//                log.info("=== {} ===", context.getSystem().printTree());
 
                 return Behaviors.empty();
             });
@@ -145,8 +110,8 @@ public class ActorSystemClusterInstance2 {
         Config config = ConfigFactory.parseMap(overrides)
                 .withFallback(ConfigFactory.load("cluster"));
 
-//        ActorSystem<Void> system = ActorSystem.create(RootBehaviorFilterGroupRouter.create(), "cluster-example", config);
-        ActorSystem<Void> system = ActorSystem.create(RootBehaviorWithGroupRouter.create(), "cluster-example", config);
+        ActorSystem<Void> system = ActorSystem.create(RootBehaviorFilterGroupRouter.create(), "cluster-example", config);
+//        ActorSystem<Void> system = ActorSystem.create(RootBehaviorSingletonActor.create(), "cluster-example", config);
 
 //
 //        try {

@@ -29,6 +29,7 @@ import java.util.Map;
 @Slf4j
 public class ActorSystemClusterInstance1 {
 
+    //注册FilterActor到group router
     public static class RootBehaviorFilterGroupRouter {
         static Behavior<Void> create() {
             return Behaviors.setup(context -> {
@@ -50,30 +51,14 @@ public class ActorSystemClusterInstance1 {
         }
     }
 
-    public static class RootBehaviorWithGroupRouter {
+    // 单例actor
+    public static class RootBehaviorSingletonActor {
         static Behavior<Void> create() {
             return Behaviors.setup(context -> {
 
-                BehaviorConfig filterConfig = new BehaviorConfig("power > 2000");
-//                ActorRef globalFilter = singleton.init(SingletonActor.of(FilterActor.create(filterConfig, null), "GlobalFilter").withStopMessage(StopMessage.INSTANCE));
-
-//              poll router
-//                BehaviorConfig filterConfig = new BehaviorConfig("power > 2000");
-                // 创建filter的behavior
-//                Behavior<INodeMessage> filterBehavior = FilterActor.create(filterConfig, null);
-//                ActorRef<INodeMessage> filterRef = context.spawn(ProcessActor.create(filterConfig, null), "filter");
-
-                // 把filter behavior封装成pool router behavior
-//                Behavior<INodeMessage> filterPoolBehavior = Routers.pool(5, filterBehavior.narrow()).withRoundRobinRouting();
-                // 实例化 pool router
-//                ActorRef<INodeMessage> filterPoolRouterRef = context.spawn(filterPoolBehavior, "FilterPoolRouter");
-
-                // 注册到filter Pool Router 到某个key
-//                ServiceKey<INodeMessage> FILTER_SERVICE_KEY = ServiceKey.create(INodeMessage.class, "FilterPoolRouterKey");
-//                context.getSystem().receptionist().tell(Receptionist.register(FILTER_SERVICE_KEY, filterPoolRouterRef.narrow()));
-
                 ClusterSingleton singleton = ClusterSingleton.get(context.getSystem());
                 // 创建filter的behavior
+                BehaviorConfig filterConfig = new BehaviorConfig("power > 2000");
                 Behavior<IDeviceMessage> filterBehavior = FilterActor.create(filterConfig, null);
                 // 创建单例actor
                 SingletonActor<IDeviceMessage> filterSingletonActor = SingletonActor.of(filterBehavior, "GlobalFilter");
@@ -94,8 +79,8 @@ public class ActorSystemClusterInstance1 {
         Config config = ConfigFactory.parseMap(overrides)
                 .withFallback(ConfigFactory.load("cluster"));
 
-//        ActorSystem<Void> system = ActorSystem.create(RootBehaviorFilterGroupRouter.create(), "cluster-example", config);
-        ActorSystem<Void> system = ActorSystem.create(RootBehaviorWithGroupRouter.create(), "cluster-example", config);
+        ActorSystem<Void> system = ActorSystem.create(RootBehaviorFilterGroupRouter.create(), "cluster-example", config);
+//        ActorSystem<Void> system = ActorSystem.create(RootBehaviorSingletonActor.create(), "cluster-example", config);
 
         try {
             Thread.sleep(10000);
@@ -104,8 +89,6 @@ public class ActorSystemClusterInstance1 {
         }
         System.out.println(system.printTree());
         log.info("=== actor system started ===");
-
-//        ServiceDiscovery serviceDiscovery = Discovery.get(system).discovery();
 
     }
 
